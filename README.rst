@@ -16,13 +16,10 @@ Create a new template ::
     $ sudo chown -Rf www-data:www-data NEW_PROJECT_NAME && sudo chmod -Rf 755 NEW_PROJECT_NAME
     $ cd /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME && sudo python manage.py collectstatic
 
-.. note:: You should NOT use the name geonode for your project as it will conflict with the default geonode package name.
 
 After that be sure to change apache vhost configuration to point to our new project ::
     
     WSGIScriptAlias / /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME
-
     Document Root /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME
-
 
     $ sudo service apache2 restart
