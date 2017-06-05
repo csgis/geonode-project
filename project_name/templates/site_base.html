@@ -1,12 +1,122 @@
 {% extends "base.html" %}
+
+{% load i18n %}
+{% load i18n avatar_tags %}
+
+
 {% block extra_head %}
+      <link href="{{ STATIC_URL }}css/idai-components.css" rel="stylesheet" />
       <link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
+
+<script
+			  src="https://code.jquery.com/jquery-2.2.4.min.js"
+			  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+			  crossorigin="anonymous"></script>
+    <script src="{{ STATIC_URL }}/js/angular.js"></script>
+    <script src="{{ STATIC_URL }}/js/idai-components-deps.js"></script>
+    <script src="{{ STATIC_URL }}/js/idai-components.min.js"></script>
+
 {% endblock %}
-{% block extra_tab %}
-{% comment %}
-Add Tab for Third Party Apps
-<li>
- <a href="{{ PROJECT_ROOT }}app">App</a>
-</li>
-{% endcomment %}
-{% endblock %}
+
+{% block header %}
+ <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+   <div class="container">
+        <div class="navbar-header">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a aria-expanded="false" aria-haspopup="true"
+                 class="dropdown-toggle"
+                 data-toggle="dropdown" href="#">
+                <img src="{{ STATIC_URL }}img/kleinergreif.png" id="brand-img"> <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="http://www.dainst.org/de/forschung/forschung-digital/idai.welt" target="_blank">iDAI.welt</a></li>
+                <li class="divider"></li><li><a href="https://gazetteer.dainst.org/" target="_blank">iDAI.gazetteer</a></li>
+                <li><a href="http://geoserver.dainst.org/" target="_blank">iDAI.geoserver</a></li>
+                <li><a href="http://arachne.uni-koeln.de/" target="_blank">iDAI.objects&nbsp;/&nbsp;Arachne</a></li>
+                <li><a href="http://zenon.dainst.org" target="_blank">iDAI.bibliography&nbsp;/&nbsp;Zenon</a></li>
+                <li><a href="http://archwort.dainst.org/thesaurus/de/vocab" target="_blank">iDAI.vocab</a></li>
+                <li><a href="http://hellespont.dainst.org" target="_blank">Hellespont</a></li>
+              </ul>
+            </li>
+            <li id="nav_title">
+               <a href="http://geoserver.dainst.org/" style="font-size:20px"> iDAI.geoserver</a>
+            </li>
+          </ul>
+        </div>
+
+      <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            {% block tabs %}
+            <li id="nav_layers">
+              <a href="{% url "layer_browse" %}">{% trans "Layers" %}</a>
+            </li>
+            <li id="nav_maps">
+              <a href="{% url "maps_browse" %}">{% trans "Maps" %}</a>
+            </li>
+            <li id="nav_documents">
+              <a href="{% url "document_browse" %}">{% trans "Documents" %}</a>
+            </li>
+           {% block extra_tab %}
+           {% endblock %}
+            <li id="nav_people">
+              <a href="{% url "profile_browse" %}">{% trans "People" %}</a>
+            </li>
+            <li id="nav_groups">
+              <a href="{% url "group_list" %}">{% trans "Groups" %}</a>
+            </li>
+            {% endblock %}
+
+              {% if not user.is_authenticated and REGISTRATION_OPEN %}
+              <li><a href="{% url "account_signup" %}">{% trans "Register" %}</a></li>
+              {% endif %}
+              {% if user.is_authenticated %}
+              <li>
+                  <a href="#" data-toggle="modal" data-target="#UserModal" role="button" aria-expanded="false">
+                      {% avatar user 30 %} {{ user.username }}
+                  </a>
+              </li>
+              {% else %}
+              <li>
+                  <a href="#" data-toggle="modal" data-target="#SigninModal" role="button" >
+                      {% trans "Sign in" %}
+                  </a>
+              </li>
+              {% endif %}
+          </ul>
+
+	  <form class="navbar-form" id="search" action="{% url "search" %}" >
+	    <div class="col-md-3">
+              <div class="input-group">
+                {% if HAYSTACK_SEARCH %}
+                <input id="search_input" type="text" placeholder="Search" class="form-control" name="q">
+                {% else %}
+                <input id="search_input" type="text" placeholder="Search" class="form-control" name="title__icontains">
+                {% endif %}
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                </span>
+              </div>
+            </div>
+          </form>
+
+        </div><!--/.nav-collapse -->
+
+   </div>
+ </nav>
+{% endblock header %}
+
+{% block footer %}
+<idai-footer>
+<div class="row">
+<div class="col-md-12 text-center">
+<p>
+<a class="ng-scope" ng-href="http://www.dainst.de/" ng-repeat="(key, uri) in institutions" href="http://www.dainst.de/">
+<img class="logoImage" ng-src="{{ STATIC_URL }}/img/logo_dai.png" src="{{ STATIC_URL }}/img/logo_dai.png">
+</a>
+</p>
+</div>
+</div>
+</idai-footer>
+{% endblock footer %}
+
