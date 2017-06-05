@@ -14,7 +14,9 @@ Create a new template ::
  -epy,rst 
     $ sudo pip install -e NEW_PROJECT_NAME
     $ sudo chown -Rf www-data:www-data NEW_PROJECT_NAME && sudo chmod -Rf 755 NEW_PROJECT_NAME
-    $ cd /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME && sudo python manage.py collectstatic
+    $ cd /var/www/NEW_PROJECT_NAME/
+    $ sudo python manage.py collectstatic
+    $ sudo python manage.py syncdb
 
 
 After that be sure to change apache vhost configuration to point to our new project ::
