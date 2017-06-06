@@ -18,8 +18,8 @@ $( document ).ready(function($) {
             $.ajax(url, {
                 'context': this,
                 'success': function(result,e) {
-                    // here we could correct links
-                    var n = result.replace('', '');
+                    // autolink URLs
+                    var n = result.autoLink({target: "_blank"});
                     //console.log (result);
                     if(result.indexOf('table class="featureInfo"') != -1){
                         callback.call(this, n);  
