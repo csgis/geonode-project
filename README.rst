@@ -10,7 +10,7 @@ Installation
 Create a new template ::
     
     $ cd /var/www
-    $ sudo -E django-admin startproject NEW_PROJECT_NAME --template=https://github.com/t-book/geonode-project/archive/2.4.zip
+    $ sudo -E django-admin startproject.py NEW_PROJECT_NAME --template=https://github.com/t-book/geonode-project/archive/2.4.zip
  -epy,rst 
     $ sudo pip install -e NEW_PROJECT_NAME
     $ sudo chown -Rf www-data:www-data NEW_PROJECT_NAME && sudo chmod -Rf 755 NEW_PROJECT_NAME
