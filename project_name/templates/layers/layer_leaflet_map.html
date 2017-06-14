@@ -80,7 +80,7 @@ $( document ).ready(function($) {
     // Create layer control
     L.control.layers(basemaps, layers).addTo(map);
  
-     /* Background Layer */
+     /* Stamen Background Layer */
     function basemap() {
         var attr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.';
         return L.tileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.png", {
@@ -89,16 +89,16 @@ $( document ).ready(function($) {
         });
     }
 
-
-
+     /* Mapbox Background Layer */
     function mapboxBase(){
-        return L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        return L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibW90b3JhbWEiLCJhIjoieXRfR1RSMCJ9.IbR0xPoCpTPouMXAamfdjg', {
         maxZoom: 18,
         attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a>',
         id: 'mapbox.light'
         }).addTo(map);
     }
 
+     /* Blank Background Layer */
     function blank() {
         var layer = new L.Layer();
         layer.onAdd = layer.onRemove = function() {};
