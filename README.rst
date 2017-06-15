@@ -22,6 +22,6 @@ Create a new template ::
 After that be sure to change apache vhost configuration to point to our new project ::
     
     WSGIScriptAlias / /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME
-    Document Root /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME
+    DocumentRoot /var/www/NEW_PROJECT_NAME/NEW_PROJECT_NAME
 
     $ sudo service apache2 restart
