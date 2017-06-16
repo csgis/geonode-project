@@ -48,7 +48,7 @@ $( document ).ready(function($) {
 
     map.on('click', function(e) {
         // save current position to global   
-        window.currentLeafletMousePos = e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4); 
+        window.currentLeafletMousePos = e.latlng.lat.toFixed(6) + ", " + e.latlng.lng.toFixed(6); 
         // copy current pos to clipboard
         if (holdShift == true){
             var $temp = $("<input>");
@@ -123,7 +123,7 @@ $( document ).ready(function($) {
 
     L.control.coordinates({
         position:"bottomleft", //optional default "bootomright"
-        decimals:4, //optional default 4
+        decimals:6, //optional default 4
         decimalSeperator:".", //optional default "."
         labelTemplateLat:"Lat: {y}", //optional default "Lat: {y}"
         labelTemplateLng:"Lon: {x}", //optional default "Lng: {x}"
