@@ -138,5 +138,54 @@ if CENTRALIZED_DASHBOARD_ENABLED and USER_ANALYTICS_ENABLED and 'geonode_logstas
 if LDAP_ENABLED and 'geonode_ldap' not in INSTALLED_APPS:
     INSTALLED_APPS += ('geonode_ldap',)
 
-# Add your specific LDAP configuration after this comment:
-# https://docs.geonode.org/en/master/advanced/contrib/#configuration
+    from django_auth_ldap import config as ldap_config
+    from geonode_ldap.config import GeonodeNestedGroupOfNamesType
+    import ldap
+
+    # add ldap as authentication backend
+    AUTHENTICATION_BACKENDS += (
+        'geonode_ldap.backend.GeonodeLdapBackend',
+    )
+
+    # django_auth_ldap configuration
+    AUTH_LDAP_SERVER_URI = os.getenv("LDAP_SERVER_URL")
+    AUTH_LDAP_BIND_DN = os.getenv("LDAP_BIND_DN")
+    AUTH_LDAP_BIND_PASSWORD = os.getenv("LDAP_BIND_PASSWORD")
+    AUTH_LDAP_USER_SEARCH = ldap_config.LDAPSearch(
+        os.getenv("LDAP_USER_SEARCH_DN"),
+        ldap.SCOPE_SUBTREE,
+        os.getenv("LDAP_USER_SEARCH_FILTERSTR")
+    )
+    AUTH_LDAP_GROUP_SEARCH = ldap_config.LDAPSearch(
+        os.getenv("LDAP_GROUP_SEARCH_DN"),
+        ldap.SCOPE_SUBTREE,
+        os.getenv("LDAP_GROUP_SEARCH_FILTERSTR")
+    )
+    AUTH_LDAP_GROUP_TYPE = GeonodeNestedGroupOfNamesType()
+    AUTH_LDAP_USER_ATTR_MAP = {
+        "first_name": "givenName",
+        "last_name": "sn",
+        "email": "mailPrimaryAddress"
+    }
+    AUTH_LDAP_FIND_GROUP_PERMS = True
+    AUTH_LDAP_MIRROR_GROUPS_EXCEPT = [
+        "test_group"
+    ]
+
+    # these are not needed by django_auth_ldap - we use them to find and match
+    # GroupProfiles and GroupCategories
+    GEONODE_LDAP_GROUP_NAME_ATTRIBUTE = os.getenv("LDAP_GROUP_NAME_ATTRIBUTE", default="cn")
+    GEONODE_LDAP_GROUP_PROFILE_FILTERSTR = os.getenv("LDAP_GROUP_SEARCH_FILTERSTR", default='(ou=research group)')
+    GEONODE_LDAP_GROUP_PROFILE_MEMBER_ATTR = os.getenv("LDAP_GROUP_PROFILE_MEMBER_ATTR", default='member')
+    
+    # schedule the management commands for updating users and groups
+    CELERY_BEAT_SCHEDULE = {
+        'update_ldap_users': {
+            'task': 'geonode_ldap.tasks.updateldapusers',
+            'schedule': 600
+        },
+        'update_ldap_groups': {
+            'task': 'geonode_ldap.tasks.updateldapgroups',
+            'schedule': 600
+        },
+    }
